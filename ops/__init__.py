@@ -28,6 +28,16 @@ REGISTRY = {
 }
 
 
+def _apply_to_one(name: str, idx: int, pipeline: list[dict], ctx: dict) -> str:
+    """Apply every pipeline step to one filename, returning the transformed name."""
+    for step in pipeline:
+        op = REGISTRY.get(step.get("op"))
+        if op is None:
+            raise ValueError(f"unknown op: {step.get('op')!r}")
+        name = op(name, idx, ctx, step.get("params") or {})
+    return name
+
+
 def run_pipeline(names: list[str], pipeline: list[dict], ctx: dict | None = None) -> list[str]:
     """Apply pipeline ops sequentially to each name. Returns new names.
 
@@ -36,12 +46,4 @@ def run_pipeline(names: list[str], pipeline: list[dict], ctx: dict | None = None
     need it can read without touching disk themselves.
     """
     ctx = ctx if ctx is not None else {}
-    out = list(names)
-    for idx, name in enumerate(out):
-        for step in pipeline:
-            op = REGISTRY.get(step.get("op"))
-            if op is None:
-                raise ValueError(f"unknown op: {step.get('op')!r}")
-            name = op(name, idx, ctx, step.get("params") or {})
-        out[idx] = name
-    return out
+    return [_apply_to_one(n, i, pipeline, ctx) for i, n in enumerate(names)]

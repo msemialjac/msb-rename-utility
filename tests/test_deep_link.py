@@ -73,9 +73,3 @@ class TestDeepLinkAcceptedByPreview:
         assert [row["new"] for row in rows] == ["img_1_001.jpg", "img_2_002.jpg"]
 
 
-@pytest.fixture
-def client():
-    from app import app as flask_app
-    flask_app.config["TESTING"] = True
-    with flask_app.test_client() as c:
-        yield c

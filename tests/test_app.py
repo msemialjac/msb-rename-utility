@@ -11,16 +11,6 @@ from pathlib import Path
 
 import pytest
 
-from app import app as flask_app
-
-
-@pytest.fixture
-def client():
-    flask_app.config["TESTING"] = True
-    with flask_app.test_client() as c:
-        yield c
-
-
 def _make_files(tmp_path: Path, names: list[str]) -> None:
     for n in names:
         (tmp_path / n).write_text(f"content of {n}")
