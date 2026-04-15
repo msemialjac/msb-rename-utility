@@ -277,11 +277,17 @@ $("#filesInput").addEventListener("input", updateStatus);
 // `dir` field stays user-typed. The picker's job is only to save typing
 // filenames.
 
-function _setFilenames(names) {
+function _fillFilenames(names) {
   const filtered = names.filter(Boolean);
   if (!filtered.length) return;
   $("#filesInput").value = filtered.join("\n");
   updateStatus();
+}
+function _setFilenames(names) {
+  // Browser-picker path: no absolute dir available, warn the user.
+  const filtered = names.filter(Boolean);
+  if (!filtered.length) return;
+  _fillFilenames(filtered);
   $("#statusLine").textContent +=
     " · dir not auto-filled (browser restriction) — type it for apply";
 }
@@ -311,7 +317,31 @@ function _fallbackChange(e) {
   ));
 }
 
+async function pickFolderNative() {
+  // Server-side native picker (zenity). Returns the absolute directory
+  // path AND a listing, so the apply-ready `dir` field is filled without
+  // the user having to type. Returns false if unavailable (503) so the
+  // caller can fall through to the browser picker.
+  let r;
+  try { r = await fetch("/api/pick-dir", {method: "POST"}); }
+  catch { return false; }
+  if (r.status === 503) return false;
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({error: r.statusText}));
+    showError(`folder pick failed: ${err.error}`);
+    return true;
+  }
+  const data = await r.json();
+  if (data.cancelled) return true;
+  if (data.dir) {
+    $("#dirInput").value = data.dir;
+    _fillFilenames(data.files || []);
+  }
+  return true;
+}
+
 async function onPickFolder() {
+  if (await pickFolderNative()) return;
   if (window.showDirectoryPicker) {
     try { await pickFolderModern(); }
     catch (e) { if (e.name !== "AbortError") showError(`folder pick failed: ${e.message}`); }

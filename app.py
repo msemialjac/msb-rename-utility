@@ -13,12 +13,14 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
+import subprocess
 import uuid
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
 from ops import run_pipeline
 from ops import collision as collision_resolve
@@ -114,12 +116,69 @@ def _parse_dir(raw: object) -> Path | None:
     return Path(raw).resolve()
 
 
+_DOCS_DIR = Path(__file__).parent / "site"
+
+
 @app.route("/")
 def index():
     # `DOCS_URL` env var lets a deployment point the toolbar link at a hosted
-    # docs site (e.g. GitHub Pages). Default is the local mkdocs dev server.
-    docs_url = os.environ.get("DOCS_URL", "http://127.0.0.1:8000/")
+    # docs site (e.g. GitHub Pages). Default serves the built mkdocs site
+    # from this Flask app at /docs/ so no second server is required.
+    docs_url = os.environ.get("DOCS_URL", "/docs/")
     return render_template("index.html", docs_url=docs_url)
+
+
+PICKER_TIMEOUT_SECONDS = 60
+
+
+@app.post("/api/pick-dir")
+def api_pick_dir():
+    """Open a native folder-chooser (zenity) and return the chosen absolute
+    path plus a listing of regular files in it. Works on any session where
+    the server process can reach the user's display (X11 DISPLAY or Wayland
+    WAYLAND_DISPLAY). Returns 503 if zenity isn't installed so the client
+    can fall back to the browser picker.
+
+    Blocks the Flask worker for as long as the dialog is open, up to
+    PICKER_TIMEOUT_SECONDS. The short timeout is deliberate — this is a
+    localhost single-user tool and 5-minute worker stalls were overkill.
+    """
+    if shutil.which("zenity") is None:
+        return jsonify(error="zenity not installed"), 503
+    try:
+        result = subprocess.run(
+            [
+                "zenity", "--file-selection", "--directory",
+                "--title=Select directory to rename in",
+            ],
+            capture_output=True, text=True, timeout=PICKER_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired:
+        return jsonify(error="picker timed out"), 504
+    # zenity exits non-zero on cancel; treat that as a normal no-op so the
+    # client doesn't show an error banner.
+    if result.returncode != 0:
+        return jsonify(cancelled=True)
+    chosen = Path(result.stdout.strip())
+    if not chosen.is_dir():
+        return jsonify(error=f"not a directory: {chosen}"), 400
+    # Filter dotfiles: the user almost never wants to rename .DS_Store or
+    # the .rename-undo-*.json sidecars this tool itself drops into the dir.
+    files = sorted(
+        p.name for p in chosen.iterdir()
+        if p.is_file() and not p.name.startswith(".")
+    )
+    return jsonify(dir=str(chosen), files=files)
+
+
+@app.route("/docs/", defaults={"filename": "index.html"})
+@app.route("/docs/<path:filename>")
+def docs(filename):
+    # mkdocs emits directory URLs (page/ → page/index.html); resolve those
+    # before delegating, otherwise send_from_directory refuses a directory.
+    if filename.endswith("/") or (_DOCS_DIR / filename).is_dir():
+        filename = filename.rstrip("/") + "/index.html" if filename else "index.html"
+    return send_from_directory(_DOCS_DIR, filename)
 
 
 @app.post("/api/preview")
@@ -362,4 +421,13 @@ if __name__ == "__main__":
     # arbitrary code execution if the PIN is obtained. Off by default;
     # opt-in via env var for local iteration.
     debug = os.environ.get("FLASK_DEBUG") == "1"
+    if not _DOCS_DIR.is_dir():
+        # Serve still boots, but /docs/ will 404 until `mkdocs build` runs.
+        # Printing here (not logging) because this runs pre-Flask-logger and
+        # we want it visible on the same stdout the user is staring at.
+        print(
+            f"[warn] docs dir not found at {_DOCS_DIR} — /docs/ route will "
+            f"return 404 until you run `python -m mkdocs build`",
+            flush=True,
+        )
     app.run(host="127.0.0.1", port=5051, debug=debug)
