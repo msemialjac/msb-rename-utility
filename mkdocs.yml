@@ -32,9 +32,7 @@ nav:
       - Collisions: concepts/collisions.md
   - Operations:
       - case: ops/case.md
-      # - replace: ops/replace.md   # TODO
-      # - regex:   ops/regex.md     # TODO
-      # - insert:  ops/insert.md    # TODO
-      # - numbering: ops/numbering.md  # TODO
-  - Recipes: recipes/index.md
-  - Migrating from BRU: migrating-from-bru.md
+      - replace: ops/replace.md
+      - regex: ops/regex.md
+      - insert: ops/insert.md
+      - numbering: ops/numbering.md
