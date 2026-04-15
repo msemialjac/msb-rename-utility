@@ -265,5 +265,24 @@ $("#undoBtn").addEventListener("click", runUndo);
 $("#shareBtn").addEventListener("click", shareLink);
 $("#filesInput").addEventListener("input", updateStatus);
 
+// ── file pickers ─────────────────────────────────────────────────
+// Browser security forbids reading absolute filesystem paths, so pickers
+// can only populate the filenames textarea. The user still fills `dir`
+// manually (or we work in preview-only mode without it).
+function _fillFilesFromList(list) {
+  const names = [...list]
+    .map(f => (f.webkitRelativePath || f.name).split("/").pop())
+    .filter(Boolean);
+  if (!names.length) return;
+  $("#filesInput").value = names.join("\n");
+  updateStatus();
+  $("#statusLine").textContent += " · dir not auto-filled (browser restriction) — type it manually for apply";
+}
+
+$("#pickFilesBtn").addEventListener("click", () => $("#pickFiles").click());
+$("#pickDirBtn").addEventListener("click", () => $("#pickDir").click());
+$("#pickFiles").addEventListener("change", e => _fillFilesFromList(e.target.files));
+$("#pickDir").addEventListener("change", e => _fillFilesFromList(e.target.files));
+
 loadFromHash();
 render();

@@ -18,8 +18,14 @@
       <label>Directory (for apply)</label>
       <input type="text" id="dirInput" placeholder="/abs/path — leave blank for preview-only" style="min-width: 320px">
     </div>
-    <div class="control-group" style="flex-basis: 100%">
+    <div class="control-group" style="flex-basis: 100%; justify-content: space-between">
       <label>Files (one per line, basenames)</label>
+      <span class="control-group" style="gap: 8px">
+        <input type="file" id="pickFiles" multiple style="display: none">
+        <input type="file" id="pickDir" webkitdirectory directory style="display: none">
+        <button type="button" id="pickFilesBtn">pick files…</button>
+        <button type="button" id="pickDirBtn">pick folder…</button>
+      </span>
     </div>
     <textarea id="filesInput" spellcheck="false"
       placeholder="IMG_0001.JPG&#10;IMG_0002.JPG&#10;vacation notes.txt"></textarea>
