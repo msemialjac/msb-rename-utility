@@ -36,3 +36,7 @@ nav:
       - regex: ops/regex.md
       - insert: ops/insert.md
       - numbering: ops/numbering.md
+      - pad: ops/pad.md
+      - trim: ops/trim.md
+      - remove_at: ops/remove_at.md
+      - change_ext: ops/change_ext.md

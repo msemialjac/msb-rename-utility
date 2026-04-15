@@ -45,6 +45,22 @@ const OP_SPECS = {
     { k: "position", label: "pos", type: "select", options: ["suffix", "prefix"], default: "suffix" },
     { k: "sep", label: "sep", type: "text", default: "_" },
   ],
+  pad: [
+    { k: "width", label: "width", type: "number", default: 4 },
+    { k: "scope", label: "scope", type: "select", options: ["stem", "name"], default: "stem" },
+  ],
+  trim: [
+    { k: "chars", label: "chars (blank=ws)", type: "text", default: "" },
+    { k: "side", label: "side", type: "select", options: ["both", "left", "right"], default: "both" },
+  ],
+  remove_at: [
+    { k: "start", label: "start", type: "number", default: 0 },
+    { k: "count", label: "count", type: "number", default: 1 },
+  ],
+  change_ext: [
+    { k: "to", label: "to", type: "text", default: "" },
+    { k: "only_if", label: "only_if (blank=any)", type: "text", default: "" },
+  ],
 };
 
 let pipeline = []; // [{op, params}]
