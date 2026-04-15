@@ -266,23 +266,72 @@ $("#shareBtn").addEventListener("click", shareLink);
 $("#filesInput").addEventListener("input", updateStatus);
 
 // ── file pickers ─────────────────────────────────────────────────
-// Browser security forbids reading absolute filesystem paths, so pickers
-// can only populate the filenames textarea. The user still fills `dir`
-// manually (or we work in preview-only mode without it).
-function _fillFilesFromList(list) {
-  const names = [...list]
-    .map(f => (f.webkitRelativePath || f.name).split("/").pop())
-    .filter(Boolean);
-  if (!names.length) return;
-  $("#filesInput").value = names.join("\n");
+// Two strategies:
+//   1. File System Access API (showDirectoryPicker / showOpenFilePicker) —
+//      Chromium only. Enumerates names without materializing File bodies.
+//      Dialog says "Select folder" (not the misleading "Upload").
+//   2. Fallback to <input type="file" [webkitdirectory]> for other browsers.
+//      This does buffer File references in memory; it's a compromise we
+//      accept only when the nicer API is unavailable.
+// In either case the browser will not reveal the absolute path, so the
+// `dir` field stays user-typed. The picker's job is only to save typing
+// filenames.
+
+function _setFilenames(names) {
+  const filtered = names.filter(Boolean);
+  if (!filtered.length) return;
+  $("#filesInput").value = filtered.join("\n");
   updateStatus();
-  $("#statusLine").textContent += " · dir not auto-filled (browser restriction) — type it manually for apply";
+  $("#statusLine").textContent +=
+    " · dir not auto-filled (browser restriction) — type it for apply";
 }
 
-$("#pickFilesBtn").addEventListener("click", () => $("#pickFiles").click());
-$("#pickDirBtn").addEventListener("click", () => $("#pickDir").click());
-$("#pickFiles").addEventListener("change", e => _fillFilesFromList(e.target.files));
-$("#pickDir").addEventListener("change", e => _fillFilesFromList(e.target.files));
+async function pickFolderModern() {
+  // Iterates the directory handle; we never call .getFile(), so no bytes
+  // are read. Names only.
+  const handle = await window.showDirectoryPicker({ mode: "read" });
+  const names = [];
+  for await (const entry of handle.values()) {
+    if (entry.kind === "file") names.push(entry.name);
+  }
+  _setFilenames(names);
+}
+
+async function pickFilesModern() {
+  const handles = await window.showOpenFilePicker({ multiple: true });
+  _setFilenames(handles.map(h => h.name));
+}
+
+function pickFallback(whichInput) {
+  $(whichInput).click();
+}
+function _fallbackChange(e) {
+  _setFilenames([...e.target.files].map(f =>
+    (f.webkitRelativePath || f.name).split("/").pop()
+  ));
+}
+
+async function onPickFolder() {
+  if (window.showDirectoryPicker) {
+    try { await pickFolderModern(); }
+    catch (e) { if (e.name !== "AbortError") showError(`folder pick failed: ${e.message}`); }
+  } else {
+    pickFallback("#pickDir");
+  }
+}
+async function onPickFiles() {
+  if (window.showOpenFilePicker) {
+    try { await pickFilesModern(); }
+    catch (e) { if (e.name !== "AbortError") showError(`file pick failed: ${e.message}`); }
+  } else {
+    pickFallback("#pickFiles");
+  }
+}
+
+$("#pickFilesBtn").addEventListener("click", onPickFiles);
+$("#pickDirBtn").addEventListener("click", onPickFolder);
+$("#pickFiles").addEventListener("change", _fallbackChange);
+$("#pickDir").addEventListener("change", _fallbackChange);
 
 loadFromHash();
 render();

@@ -11,26 +11,26 @@
       
       
       
+        <link rel="prev" href="../change_ext/">
       
-        <link rel="next" href="user/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>msb_rename_utility</title>
+        <title>date_from_mtime - msb_rename_utility</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +49,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#msb_rename_utility" class="md-skip">
+        <a href="#date_from_mtime-prependappend-a-date-from-file-mtime" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +90,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="msb_rename_utility" class="md-header__button md-logo" aria-label="msb_rename_utility" data-md-component="logo">
+    <a href="../../.." title="msb_rename_utility" class="md-header__button md-logo" aria-label="msb_rename_utility" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              date_from_mtime
             
           </span>
         </div>
@@ -189,11 +189,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -214,7 +212,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="user/" class="md-tabs__link">
+        <a href="../../../user/" class="md-tabs__link">
           
   
   
@@ -230,11 +228,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="dev/getting-started/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../getting-started/" class="md-tabs__link">
           
   
   
@@ -274,7 +274,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="msb_rename_utility" class="md-nav__button md-logo" aria-label="msb_rename_utility" data-md-component="logo">
+    <a href="../../.." title="msb_rename_utility" class="md-nav__button md-logo" aria-label="msb_rename_utility" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -289,37 +289,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -335,59 +308,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#two-docs-pick-your-starting-point" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Two docs, pick your starting point
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-it-does-in-one-screen" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What it does, in one screen
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sibling-project" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sibling project
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -451,7 +371,7 @@
   
   
     <li class="md-nav__item">
-      <a href="user/" class="md-nav__link">
+      <a href="../../../user/" class="md-nav__link">
         
   
   
@@ -531,7 +451,7 @@
   
   
     <li class="md-nav__item">
-      <a href="user/recipes/photos-by-date/" class="md-nav__link">
+      <a href="../../../user/recipes/photos-by-date/" class="md-nav__link">
         
   
   
@@ -559,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="user/recipes/pad-episodes/" class="md-nav__link">
+      <a href="../../../user/recipes/pad-episodes/" class="md-nav__link">
         
   
   
@@ -587,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="user/recipes/clean-downloads/" class="md-nav__link">
+      <a href="../../../user/recipes/clean-downloads/" class="md-nav__link">
         
   
   
@@ -615,7 +535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="user/recipes/normalize-extensions/" class="md-nav__link">
+      <a href="../../../user/recipes/normalize-extensions/" class="md-nav__link">
         
   
   
@@ -655,26 +575,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -692,7 +617,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -710,7 +635,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/getting-started/" class="md-nav__link">
+      <a href="../../getting-started/" class="md-nav__link">
         
   
   
@@ -744,17 +669,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
         
           
-          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
             
   
   
@@ -790,7 +718,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/concepts/pipeline/" class="md-nav__link">
+      <a href="../../concepts/pipeline/" class="md-nav__link">
         
   
   
@@ -818,7 +746,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/concepts/preview-vs-apply/" class="md-nav__link">
+      <a href="../../concepts/preview-vs-apply/" class="md-nav__link">
         
   
   
@@ -846,7 +774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/concepts/collisions/" class="md-nav__link">
+      <a href="../../concepts/collisions/" class="md-nav__link">
         
   
   
@@ -874,7 +802,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/concepts/share-links/" class="md-nav__link">
+      <a href="../../concepts/share-links/" class="md-nav__link">
         
   
   
@@ -902,7 +830,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/concepts/file-pickers/" class="md-nav__link">
+      <a href="../../concepts/file-pickers/" class="md-nav__link">
         
   
   
@@ -935,26 +863,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
             
   
   
@@ -972,7 +905,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -990,7 +923,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/case/" class="md-nav__link">
+      <a href="../case/" class="md-nav__link">
         
   
   
@@ -1018,7 +951,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/replace/" class="md-nav__link">
+      <a href="../replace/" class="md-nav__link">
         
   
   
@@ -1046,7 +979,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/regex/" class="md-nav__link">
+      <a href="../regex/" class="md-nav__link">
         
   
   
@@ -1074,7 +1007,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/insert/" class="md-nav__link">
+      <a href="../insert/" class="md-nav__link">
         
   
   
@@ -1102,7 +1035,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/numbering/" class="md-nav__link">
+      <a href="../numbering/" class="md-nav__link">
         
   
   
@@ -1130,7 +1063,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/pad/" class="md-nav__link">
+      <a href="../pad/" class="md-nav__link">
         
   
   
@@ -1158,7 +1091,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/trim/" class="md-nav__link">
+      <a href="../trim/" class="md-nav__link">
         
   
   
@@ -1186,7 +1119,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/remove_at/" class="md-nav__link">
+      <a href="../remove_at/" class="md-nav__link">
         
   
   
@@ -1214,7 +1147,7 @@
   
   
     <li class="md-nav__item">
-      <a href="dev/ops/change_ext/" class="md-nav__link">
+      <a href="../change_ext/" class="md-nav__link">
         
   
   
@@ -1239,10 +1172,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="dev/ops/date_from_mtime/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    date_from_mtime
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1258,6 +1218,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-it-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it does
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#edge-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Edge cases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1305,10 +1340,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#two-docs-pick-your-starting-point" class="md-nav__link">
+  <a href="#what-it-does" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Two docs, pick your starting point
+        What it does
       
     </span>
   </a>
@@ -1316,10 +1351,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-it-does-in-one-screen" class="md-nav__link">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What it does, in one screen
+        Parameters
       
     </span>
   </a>
@@ -1327,10 +1362,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sibling-project" class="md-nav__link">
+  <a href="#examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sibling project
+        Examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#edge-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Edge cases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
       
     </span>
   </a>
@@ -1354,42 +1411,81 @@
 
 
 
-<h1 id="msb_rename_utility">msb_rename_utility</h1>
-<p>A small Flask + vanilla-JS bulk file renamer, inspired by
-<a href="https://www.publicspace.net/ABetterRenameUtility/">Better Rename Utility (BRU)</a> and
-<a href="https://sourceforge.net/projects/file-folder-ren/">Métamorphose 2</a>, <strong>clean-room
-reimplemented</strong> — MIT-licensed, no copyleft inheritance, modern Python 3.</p>
-<h2 id="two-docs-pick-your-starting-point">Two docs, pick your starting point</h2>
-<div class="grid cards">
-<ul>
-<li>
-<p>:material-account: <strong>User Guide</strong></p>
-<hr />
-<p>Task-first recipes for people renaming their files. No coding
-required — click a recipe, the web UI prefills, preview what'll happen,
-apply if it looks right.</p>
-<p><a href="user/">→ Open the User Guide</a></p>
-</li>
-<li>
-<p>:material-code-braces: <strong>Developer Reference</strong></p>
-<hr />
-<p>Every operation's parameters, the pipeline JSON schema, collision rules,
-undo-log format, <code>ctx</code> plumbing. Written for people extending the tool
-or calling the HTTP API directly.</p>
-<p><a href="dev/getting-started/">→ Open the Developer Reference</a></p>
-</li>
-</ul>
+<h1 id="date_from_mtime-prependappend-a-date-from-file-mtime"><code>date_from_mtime</code> — prepend/append a date from file mtime</h1>
+<p>Stamps each filename with its own modification time. The date comes from the
+filesystem, not the current clock.</p>
+<h2 id="what-it-does">What it does</h2>
+<p>Reads each file's modification time (UTC), formats it with a <code>strftime</code>
+string, and splices the result into the name as a prefix or suffix.</p>
+<p>This op is the first to require <strong>filesystem read access</strong>. The request must
+include a <code>dir</code>, which the server uses to <code>stat</code> each file <em>before</em> running
+the pipeline. The mtimes are stashed in a per-run <code>ctx</code> that the op reads —
+the op itself never touches disk.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>type</th>
+<th>default</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>strftime string</td>
+<td><code>"%Y-%m-%d"</code></td>
+<td>Any Python <code>strftime</code> directive is allowed.</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td><code>"prefix"</code> | <code>"suffix"</code></td>
+<td><code>"prefix"</code></td>
+<td>Where to place the date relative to the stem.</td>
+</tr>
+<tr>
+<td><code>sep</code></td>
+<td>string</td>
+<td><code>"_"</code></td>
+<td>Separator between date and stem.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">date prefix</label><label for="__tabbed_1_2">sortable timestamp suffix</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;date_from_mtime&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;%Y-%m-%d&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>File <code>photo.jpg</code> with mtime 2024-04-13 →
+<code>2024-04-13_photo.jpg</code>.</p>
 </div>
-<h2 id="what-it-does-in-one-screen">What it does, in one screen</h2>
-<p>You give it a list of filenames and a <strong>pipeline</strong> — an ordered list of
-operations like "lowercase everything, strip the <code>IMG_</code> prefix, append a
-three-digit sequence number". It shows you a preview of every old → new
-rename, flags anything that would collide, and only touches disk when you
-hit <strong>apply</strong>. Every apply writes an undo-log sidecar so you can reverse it.</p>
-<h2 id="sibling-project">Sibling project</h2>
-<p>The visual language (Tokyo Night palette, card layout) mirrors
-<a href="https://github.com/msemialjac/disk-dashboard"><code>disk-dashboard</code></a>. The two
-apps are meant to feel like a suite of single-purpose Flask tools.</p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;date_from_mtime&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;%Y%m%d-%H%M&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;position&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;suffix&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;sep&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;-&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>note.txt</code> (mtime 2024-04-13 15:30 UTC) → <code>note-20240413-1530.txt</code>.</p>
+</div>
+</div>
+</div>
+<h2 id="edge-cases">Edge cases</h2>
+<ul>
+<li><strong>Missing <code>dir</code></strong>: the request fails with HTTP 400 and a message pointing
+  you at the <code>dir</code> field. Silent fallback would produce wrong dates.</li>
+<li><strong>File doesn't exist on disk</strong>: mtime is recorded as <code>0.0</code> (epoch) so the
+  formatter still runs; you'll see <code>1970-01-01</code>. Fix your input list rather
+  than relying on this.</li>
+<li><strong>Timezone</strong>: always UTC. Local-time stamps encourage ambiguity across
+  systems; if you need local, format with <code>%Y-%m-%d</code> (date is identical in
+  most time zones) or wait for a timezone param.</li>
+</ul>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../../concepts/pipeline/">Concepts › Pipeline</a> — on how <code>ctx</code> is populated.</li>
+</ul>
 
 
 
@@ -1445,10 +1541,10 @@ apps are meant to feel like a suite of single-purpose Flask tools.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.sections", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

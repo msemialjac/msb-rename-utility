@@ -7,12 +7,16 @@ theme:
       primary: indigo
       accent: indigo
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.instant
     - navigation.sections
     - navigation.top
     - content.code.copy
     - search.highlight
     - search.suggest
+  icon:
+    repo: fontawesome/brands/github
 
 markdown_extensions:
   - admonition
@@ -22,24 +26,33 @@ markdown_extensions:
       alternate_style: true
   - tables
   - attr_list
+  - md_in_html
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Concepts:
-      - Pipeline model: concepts/pipeline.md
-      - Preview vs apply: concepts/preview-vs-apply.md
-      - Collisions: concepts/collisions.md
-      - Share links: concepts/share-links.md
-      - File pickers: concepts/file-pickers.md
-  - Operations:
-      - case: ops/case.md
-      - replace: ops/replace.md
-      - regex: ops/regex.md
-      - insert: ops/insert.md
-      - numbering: ops/numbering.md
-      - pad: ops/pad.md
-      - trim: ops/trim.md
-      - remove_at: ops/remove_at.md
-      - change_ext: ops/change_ext.md
-      - date_from_mtime: ops/date_from_mtime.md
+  - User Guide:
+      - Overview: user/index.md
+      - Recipes:
+          - Rename photos by date: user/recipes/photos-by-date.md
+          - Zero-pad episode numbers: user/recipes/pad-episodes.md
+          - Clean up a messy download folder: user/recipes/clean-downloads.md
+          - Normalize extensions: user/recipes/normalize-extensions.md
+  - Developer Reference:
+      - Getting started: dev/getting-started.md
+      - Concepts:
+          - Pipeline model: dev/concepts/pipeline.md
+          - Preview vs apply: dev/concepts/preview-vs-apply.md
+          - Collisions: dev/concepts/collisions.md
+          - Share links: dev/concepts/share-links.md
+          - File pickers: dev/concepts/file-pickers.md
+      - Operations:
+          - case: dev/ops/case.md
+          - replace: dev/ops/replace.md
+          - regex: dev/ops/regex.md
+          - insert: dev/ops/insert.md
+          - numbering: dev/ops/numbering.md
+          - pad: dev/ops/pad.md
+          - trim: dev/ops/trim.md
+          - remove_at: dev/ops/remove_at.md
+          - change_ext: dev/ops/change_ext.md
+          - date_from_mtime: dev/ops/date_from_mtime.md

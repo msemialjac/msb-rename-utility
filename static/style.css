@@ -35,6 +35,12 @@ select, button, input[type="text"], input[type="number"], textarea {
 button { cursor: pointer; }
 select:hover, button:hover, input:hover, textarea:hover { border-color: var(--accent); }
 button.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+a.docs-link {
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); padding: 6px 10px; border-radius: 6px;
+  font-size: 13px; text-decoration: none; display: inline-block;
+}
+a.docs-link:hover { border-color: var(--accent); color: var(--accent); }
 
 textarea#filesInput {
   width: 100%; min-height: 110px; resize: vertical;
