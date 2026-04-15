@@ -149,8 +149,49 @@ async function runPreview() {
 document.querySelectorAll("[data-add]").forEach(b => {
   b.addEventListener("click", () => addOp(b.dataset.add));
 });
+let lastUndoLog = null; // server-returned path from last successful apply
+
+async function runApply() {
+  const dir = $("#dirInput").value.trim();
+  const files = getFiles();
+  if (!dir) { showError("`dir` is required for apply — type the absolute directory path above"); return; }
+  if (files.length === 0) { showError("add at least one filename"); return; }
+  if (!confirm(`About to rename ${files.length} file(s) in:\n${dir}\n\nContinue?`)) return;
+
+  let res, data;
+  try {
+    res = await fetch("/api/apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dir, files, pipeline: normalizePipelineForServer() }),
+    });
+    data = await res.json();
+  } catch (e) { showError(`network error: ${e.message}`); return; }
+
+  if (!res.ok) { showError(data.error || "apply failed"); return; }
+  lastUndoLog = data.undo_log;
+  $("#statusLine").textContent = `applied ${data.applied} · undo: ${data.undo_log.split("/").pop()}`;
+  runPreview();  // refresh so the grid shows the now-current state
+}
+
+async function runUndo() {
+  if (!lastUndoLog) { showError("no undo log from this session — paste one manually via /api/undo"); return; }
+  if (!confirm("Undo the last apply?")) return;
+  const res = await fetch("/api/undo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ undo_log: lastUndoLog }),
+  });
+  const data = await res.json();
+  if (!res.ok) { showError(data.error || "undo failed"); return; }
+  $("#statusLine").textContent = `undone ${data.undone}`;
+  lastUndoLog = null;
+}
+
 $("#clearBtn").addEventListener("click", () => { pipeline = []; render(); });
 $("#runBtn").addEventListener("click", runPreview);
+$("#applyBtn").addEventListener("click", runApply);
+$("#undoBtn").addEventListener("click", runUndo);
 $("#filesInput").addEventListener("input", updateStatus);
 
 render();
