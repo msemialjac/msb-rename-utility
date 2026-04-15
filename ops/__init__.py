@@ -12,18 +12,19 @@ Return the new name. Never touch disk. Never mutate inputs.
 from __future__ import annotations
 
 from . import case, replace, regex, insert, numbering
-from . import pad, trim, remove_at, change_ext
+from . import pad, trim, remove_at, change_ext, date_from_mtime
 
 REGISTRY = {
-    "case":       case.apply,
-    "replace":    replace.apply,
-    "regex":      regex.apply,
-    "insert":     insert.apply,
-    "numbering":  numbering.apply,
-    "pad":        pad.apply,
-    "trim":       trim.apply,
-    "remove_at":  remove_at.apply,
-    "change_ext": change_ext.apply,
+    "case":            case.apply,
+    "replace":         replace.apply,
+    "regex":           regex.apply,
+    "insert":          insert.apply,
+    "numbering":       numbering.apply,
+    "pad":             pad.apply,
+    "trim":            trim.apply,
+    "remove_at":       remove_at.apply,
+    "change_ext":      change_ext.apply,
+    "date_from_mtime": date_from_mtime.apply,
 }
 
 

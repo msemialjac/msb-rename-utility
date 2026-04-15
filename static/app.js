@@ -61,6 +61,11 @@ const OP_SPECS = {
     { k: "to", label: "to", type: "text", default: "" },
     { k: "only_if", label: "only_if (blank=any)", type: "text", default: "" },
   ],
+  date_from_mtime: [
+    { k: "format", label: "format", type: "text", default: "%Y-%m-%d" },
+    { k: "position", label: "pos", type: "select", options: ["prefix", "suffix"], default: "prefix" },
+    { k: "sep", label: "sep", type: "text", default: "_" },
+  ],
 };
 
 let pipeline = []; // [{op, params}]
@@ -143,7 +148,11 @@ async function runPreview() {
     res = await fetch("/api/preview", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ files, pipeline: normalizePipelineForServer() }),
+      body: JSON.stringify({
+        files,
+        pipeline: normalizePipelineForServer(),
+        dir: $("#dirInput").value.trim() || undefined,
+      }),
     });
     data = await res.json();
   } catch (e) {

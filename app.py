@@ -35,16 +35,31 @@ def _compute_rows(
     files: list[str],
     pipeline: list[dict],
     auto_resolve: bool = False,
+    directory: Path | None = None,
 ) -> tuple[list[dict], list[str], list[str]]:
-    """Pure function: run the pipeline and annotate each row. Returns (rows, olds, news).
+    """Pure(ish) function: run the pipeline and annotate each row.
 
-    If `auto_resolve` is true, the collision post-pass runs *after* the
-    pipeline and appends ' (2)', ' (3)', ... to duplicate new names. The
-    returned rows will then have no self-collisions (external collisions
-    against untouched input names are still flagged).
+    Returns (rows, olds, news).
+
+    If `directory` is provided and exists, per-file metadata (currently
+    mtime, later maybe size / EXIF) is looked up and stashed in `ctx` for ops
+    that need it. This is the only point where the pipeline can touch disk
+    for reads; mutation still happens only in /api/apply.
+
+    If `auto_resolve` is true, the collision post-pass appends ' (2)', ' (3)',
+    ... to duplicate new names after the pipeline runs.
     """
     bases = [Path(f).name for f in files]
-    news = run_pipeline(bases, pipeline)
+
+    ctx: dict = {}
+    if directory is not None and directory.is_dir():
+        mtimes: list[float] = []
+        for b in bases:
+            p = directory / b
+            mtimes.append(p.stat().st_mtime if p.exists() else 0.0)
+        ctx["mtimes"] = mtimes
+
+    news = run_pipeline(bases, pipeline, ctx=ctx)
     if auto_resolve:
         news = collision_resolve.resolve(news)
     new_counts = Counter(news)
@@ -84,8 +99,12 @@ def api_preview():
         return jsonify(error="`pipeline` must be a list"), 400
 
     auto_resolve = bool(body.get("auto_resolve_collisions", False))
+    raw_dir = body.get("dir")
+    directory = None
+    if isinstance(raw_dir, str) and raw_dir:
+        directory = Path(raw_dir).expanduser().resolve()
     try:
-        rows, _, _ = _compute_rows(files, pipeline, auto_resolve=auto_resolve)
+        rows, _, _ = _compute_rows(files, pipeline, auto_resolve=auto_resolve, directory=directory)
     except ValueError as e:
         return jsonify(error=str(e)), 400
     return jsonify(rows)
@@ -110,7 +129,9 @@ def api_apply():
 
     auto_resolve = bool(body.get("auto_resolve_collisions", False))
     try:
-        rows, olds, news = _compute_rows(files, pipeline, auto_resolve=auto_resolve)
+        rows, olds, news = _compute_rows(
+            files, pipeline, auto_resolve=auto_resolve, directory=directory
+        )
     except ValueError as e:
         return jsonify(error=str(e)), 400
 

@@ -40,3 +40,4 @@ nav:
       - trim: ops/trim.md
       - remove_at: ops/remove_at.md
       - change_ext: ops/change_ext.md
+      - date_from_mtime: ops/date_from_mtime.md

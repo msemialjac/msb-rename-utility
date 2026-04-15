@@ -787,6 +787,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/date_from_mtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    date_from_mtime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -868,8 +896,11 @@
 <ul>
 <li><code>idx</code> is the zero-based position of the file in the original input list.
   Numbering ops use this to assign sequence numbers.</li>
-<li><code>ctx</code> is a per-run dict shared across all ops and all files. Reserved for
-  future ops that need to stash derived state (e.g. EXIF dates read once).</li>
+<li><code>ctx</code> is a per-run dict shared across all ops and all files. The Flask
+  layer populates it with filesystem-derived metadata before the pipeline
+  runs (currently <code>ctx['mtimes']</code>, populated when the request includes a
+  valid <code>dir</code>). Ops that need disk reads consult <code>ctx</code> rather than touching
+  disk themselves — this keeps ops pure and trivially unit-testable.</li>
 <li>Ops never touch disk. They transform strings. This makes them trivially
   unit-testable and makes <strong>preview</strong> literally the same code path as apply.</li>
 </ul>

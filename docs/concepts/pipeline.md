@@ -10,8 +10,11 @@ for each filename:
 
 - `idx` is the zero-based position of the file in the original input list.
   Numbering ops use this to assign sequence numbers.
-- `ctx` is a per-run dict shared across all ops and all files. Reserved for
-  future ops that need to stash derived state (e.g. EXIF dates read once).
+- `ctx` is a per-run dict shared across all ops and all files. The Flask
+  layer populates it with filesystem-derived metadata before the pipeline
+  runs (currently `ctx['mtimes']`, populated when the request includes a
+  valid `dir`). Ops that need disk reads consult `ctx` rather than touching
+  disk themselves — this keeps ops pure and trivially unit-testable.
 - Ops never touch disk. They transform strings. This makes them trivially
   unit-testable and makes **preview** literally the same code path as apply.
 
