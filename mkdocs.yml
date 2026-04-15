@@ -1,0 +1,40 @@
+site_name: msb_rename_utility
+site_description: Clean-room rename pipeline — web UI + documented op library.
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+    - search.suggest
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Concepts:
+      - Pipeline model: concepts/pipeline.md
+      - Preview vs apply: concepts/preview-vs-apply.md
+      - Collisions: concepts/collisions.md
+  - Operations:
+      - case: ops/case.md
+      # - replace: ops/replace.md   # TODO
+      # - regex:   ops/regex.md     # TODO
+      # - insert:  ops/insert.md    # TODO
+      # - numbering: ops/numbering.md  # TODO
+  - Recipes: recipes/index.md
+  - Migrating from BRU: migrating-from-bru.md

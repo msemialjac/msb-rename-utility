@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>msb_rename_utility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>msb_rename_utility</h1>
+    <span class="host">preview-only scaffold</span>
+    <span class="refresh-info" id="statusLine">0 files &middot; 0 ops</span>
+  </header>
+
+  <section class="controls">
+    <div class="control-group">
+      <label>Files (one per line)</label>
+    </div>
+    <textarea id="filesInput" spellcheck="false"
+      placeholder="IMG_0001.JPG&#10;IMG_0002.JPG&#10;vacation notes.txt"></textarea>
+  </section>
+
+  <section class="controls pipeline-bar">
+    <div class="control-group">
+      <label>Pipeline</label>
+      <button data-add="case">+ case</button>
+      <button data-add="replace">+ replace</button>
+      <button data-add="regex">+ regex</button>
+      <button data-add="insert">+ insert</button>
+      <button data-add="numbering">+ numbering</button>
+      <button id="clearBtn">clear</button>
+      <button id="runBtn" class="active">preview</button>
+    </div>
+  </section>
+
+  <main>
+    <div class="card" id="pipelineCard">
+      <div class="label">Pipeline (applied top to bottom)</div>
+      <div id="pipeline"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Preview</div>
+      <div id="preview" class="preview-grid"></div>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
