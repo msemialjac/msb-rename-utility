@@ -30,6 +30,7 @@ nav:
       - Pipeline model: concepts/pipeline.md
       - Preview vs apply: concepts/preview-vs-apply.md
       - Collisions: concepts/collisions.md
+      - Share links: concepts/share-links.md
   - Operations:
       - case: ops/case.md
       - replace: ops/replace.md

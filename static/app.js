@@ -176,6 +176,51 @@ document.querySelectorAll("[data-add]").forEach(b => {
 });
 let lastUndoLog = null; // server-returned path from last successful apply
 
+// ── URL deep links ───────────────────────────────────────────────
+// Hash format: #p=<urlsafe-b64 of JSON {pipeline, files?}>
+// The hash stays client-side (never sent to server), so sharing doesn't leak
+// to server logs. `dir` is deliberately excluded — it's a local path.
+function encodeShareHash(payload) {
+  const json = JSON.stringify(payload);
+  const b64 = btoa(unescape(encodeURIComponent(json)))
+    .replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
+  return `#p=${b64}`;
+}
+function decodeShareHash(hash) {
+  const m = (hash || "").match(/^#p=(.+)$/);
+  if (!m) return null;
+  let b64 = m[1].replaceAll("-", "+").replaceAll("_", "/");
+  while (b64.length % 4) b64 += "=";
+  try {
+    return JSON.parse(decodeURIComponent(escape(atob(b64))));
+  } catch { return null; }
+}
+
+function loadFromHash() {
+  const payload = decodeShareHash(location.hash);
+  if (!payload) return;
+  if (Array.isArray(payload.pipeline)) {
+    pipeline = payload.pipeline.map(s => ({ op: s.op, params: { ...s.params } }));
+    render();
+  }
+  if (typeof payload.files === "string" && payload.files) {
+    $("#filesInput").value = payload.files;
+    updateStatus();
+  }
+}
+
+function shareLink() {
+  const hash = encodeShareHash({
+    pipeline,
+    files: $("#filesInput").value || undefined,
+  });
+  const url = `${location.origin}${location.pathname}${hash}`;
+  navigator.clipboard.writeText(url).then(
+    () => { $("#statusLine").textContent = "link copied to clipboard"; },
+    () => { prompt("Copy this link:", url); }
+  );
+}
+
 async function runApply() {
   const dir = $("#dirInput").value.trim();
   const files = getFiles();
@@ -217,6 +262,8 @@ $("#clearBtn").addEventListener("click", () => { pipeline = []; render(); });
 $("#runBtn").addEventListener("click", runPreview);
 $("#applyBtn").addEventListener("click", runApply);
 $("#undoBtn").addEventListener("click", runUndo);
+$("#shareBtn").addEventListener("click", shareLink);
 $("#filesInput").addEventListener("input", updateStatus);
 
+loadFromHash();
 render();
