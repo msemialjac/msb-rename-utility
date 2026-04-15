@@ -20,6 +20,7 @@ from pathlib import Path
 from flask import Flask, jsonify, render_template, request
 
 from ops import run_pipeline
+from ops import collision as collision_resolve
 
 app = Flask(__name__)
 
@@ -30,17 +31,33 @@ UNDO_LOG_SUFFIX = ".json"
 _BAD_NAME_RE = re.compile(r"[/\x00]")
 
 
-def _compute_rows(files: list[str], pipeline: list[dict]) -> tuple[list[dict], list[str], list[str]]:
-    """Pure function: run the pipeline and annotate each row. Returns (rows, olds, news)."""
+def _compute_rows(
+    files: list[str],
+    pipeline: list[dict],
+    auto_resolve: bool = False,
+) -> tuple[list[dict], list[str], list[str]]:
+    """Pure function: run the pipeline and annotate each row. Returns (rows, olds, news).
+
+    If `auto_resolve` is true, the collision post-pass runs *after* the
+    pipeline and appends ' (2)', ' (3)', ... to duplicate new names. The
+    returned rows will then have no self-collisions (external collisions
+    against untouched input names are still flagged).
+    """
     bases = [Path(f).name for f in files]
     news = run_pipeline(bases, pipeline)
+    if auto_resolve:
+        news = collision_resolve.resolve(news)
     new_counts = Counter(news)
-    old_set = set(bases)
+    # External collision only counts against inputs that are NOT moving — if
+    # the other file is also being renamed away, it's freeing that name by
+    # end-of-run, so no real clash. (Two-phase rename on apply handles the
+    # ordering safely.)
+    stationary_olds = {o for o, n in zip(bases, news) if o == n}
 
     rows = []
     for old, new in zip(bases, news):
         collides_self = new_counts[new] > 1
-        collides_other = (new in old_set) and (new != old)
+        collides_other = (new in stationary_olds) and (new != old)
         rows.append({
             "old": old,
             "new": new,
@@ -66,8 +83,9 @@ def api_preview():
     if not isinstance(pipeline, list):
         return jsonify(error="`pipeline` must be a list"), 400
 
+    auto_resolve = bool(body.get("auto_resolve_collisions", False))
     try:
-        rows, _, _ = _compute_rows(files, pipeline)
+        rows, _, _ = _compute_rows(files, pipeline, auto_resolve=auto_resolve)
     except ValueError as e:
         return jsonify(error=str(e)), 400
     return jsonify(rows)
@@ -90,8 +108,9 @@ def api_apply():
     if not directory.is_dir():
         return jsonify(error=f"not a directory: {directory}"), 400
 
+    auto_resolve = bool(body.get("auto_resolve_collisions", False))
     try:
-        rows, olds, news = _compute_rows(files, pipeline)
+        rows, olds, news = _compute_rows(files, pipeline, auto_resolve=auto_resolve)
     except ValueError as e:
         return jsonify(error=str(e)), 400
 

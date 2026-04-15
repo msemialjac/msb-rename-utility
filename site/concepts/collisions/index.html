@@ -476,6 +476,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="How collisions are resolved">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manually-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manually (default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatically-auto_resolve_collisions-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatically (auto_resolve_collisions: true)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moving-out-of-the-way-is-not-a-collision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Moving out of the way" is not a collision
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -761,6 +800,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="How collisions are resolved">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manually-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manually (default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatically-auto_resolve_collisions-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatically (auto_resolve_collisions: true)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moving-out-of-the-way-is-not-a-collision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Moving out of the way" is not a collision
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -811,10 +889,51 @@ rename to clobber another file. Apply refuses to run if <em>any</em> row has
   enhancement is to pass <code>dir</code> optionally to preview for a deep check.</li>
 </ul>
 <h2 id="how-collisions-are-resolved">How collisions are resolved</h2>
-<p>They aren't, automatically. The user is shown the <code>⚠ collision</code> marker and
-expected to fix the pipeline (add a <a href="../../ops/numbering/"><code>numbering</code></a> step,
-insert a stem suffix, etc.). A future op <code>collision_auto_append</code> could add
-<code>" (2)"</code>, <code>" (3)"</code>, … to collided rows — BRU has this; we don't yet.</p>
+<h3 id="manually-default">Manually (default)</h3>
+<p>The <code>⚠ collision</code> marker is shown and the user is expected to adjust the
+pipeline — e.g. add a <a href="../../ops/numbering/"><code>numbering</code></a> step.</p>
+<h3 id="automatically-auto_resolve_collisions-true">Automatically (<code>auto_resolve_collisions: true</code>)</h3>
+<p>Pass <code>auto_resolve_collisions: true</code> in the request body to enable an
+automatic post-pass:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;IMG_01.JPG&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img_01.jpg&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;pipeline&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;op&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;case&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lower&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;scope&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;both&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}],</span>
+<span class="w">  </span><span class="nt">&quot;auto_resolve_collisions&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Produces:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">idx</th>
+<th>old</th>
+<th>new</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td><code>IMG_01.JPG</code></td>
+<td><code>img_01.jpg</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td><code>img_01.jpg</code></td>
+<td><code>img_01 (2).jpg</code></td>
+</tr>
+</tbody>
+</table>
+<p>The post-pass runs <em>after</em> the pipeline, so it sees all new names at once and
+appends <code>" (2)"</code>, <code>" (3)"</code>, … to later duplicates. Order is stable: the first
+occurrence of each name keeps it.</p>
+<p>Why this isn't a regular pipeline op: pipeline ops run per-file and can't see
+siblings. The collision post-pass needs the whole batch.</p>
+<h3 id="moving-out-of-the-way-is-not-a-collision">"Moving out of the way" is not a collision</h3>
+<p>If two rows <code>A → B</code> and <code>B → C</code> both rename, there's no real clash: by
+end-of-run, <code>B</code> is free. Preview used to flag this as an external collision;
+since the post-pass fix, it correctly shows no collision. (The two-phase
+rename in <code>/api/apply</code> guarantees this is safe in practice, regardless of
+ordering.)</p>
 <h2 id="why-this-is-safe-by-construction">Why this is safe by construction</h2>
 <p>Even if a caller bypassed the preview UI and hit <code>/api/apply</code> directly with a
 colliding pipeline, the server re-computes preview and refuses with HTTP 409.

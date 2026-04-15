@@ -22,10 +22,45 @@ The preview endpoint flags a row as `collision: true` when either is true:
 
 ## How collisions are resolved
 
-They aren't, automatically. The user is shown the `⚠ collision` marker and
-expected to fix the pipeline (add a [`numbering`](../ops/numbering.md) step,
-insert a stem suffix, etc.). A future op `collision_auto_append` could add
-`" (2)"`, `" (3)"`, … to collided rows — BRU has this; we don't yet.
+### Manually (default)
+
+The `⚠ collision` marker is shown and the user is expected to adjust the
+pipeline — e.g. add a [`numbering`](../ops/numbering.md) step.
+
+### Automatically (`auto_resolve_collisions: true`)
+
+Pass `auto_resolve_collisions: true` in the request body to enable an
+automatic post-pass:
+
+```json
+{
+  "files": ["IMG_01.JPG", "img_01.jpg"],
+  "pipeline": [{ "op": "case", "params": { "mode": "lower", "scope": "both" } }],
+  "auto_resolve_collisions": true
+}
+```
+
+Produces:
+
+| idx | old            | new               |
+|----:|----------------|-------------------|
+| 0   | `IMG_01.JPG`   | `img_01.jpg`      |
+| 1   | `img_01.jpg`   | `img_01 (2).jpg`  |
+
+The post-pass runs *after* the pipeline, so it sees all new names at once and
+appends `" (2)"`, `" (3)"`, … to later duplicates. Order is stable: the first
+occurrence of each name keeps it.
+
+Why this isn't a regular pipeline op: pipeline ops run per-file and can't see
+siblings. The collision post-pass needs the whole batch.
+
+### "Moving out of the way" is not a collision
+
+If two rows `A → B` and `B → C` both rename, there's no real clash: by
+end-of-run, `B` is free. Preview used to flag this as an external collision;
+since the post-pass fix, it correctly shows no collision. (The two-phase
+rename in `/api/apply` guarantees this is safe in practice, regardless of
+ordering.)
 
 ## Why this is safe by construction
 
