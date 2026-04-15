@@ -1,6 +1,9 @@
 :root {
   --bg: #1a1b26; --surface: #24283b; --surface2: #2f3549;
   --border: #3b4261; --text: #c0caf5; --dim: #565f89;
+  /* Brighter muted tone for labels / captions where --dim was failing
+     contrast against --surface. Stays within the Tokyo Night family. */
+  --text-muted: #8b95c5;
   --accent: #7aa2f7; --green: #9ece6a; --yellow: #e0af68;
   --red: #f7768e; --purple: #bb9af7; --cyan: #7dcfff;
   --orange: #ff9e64;
@@ -16,8 +19,8 @@ header {
   display: flex; align-items: center; gap: 16px;
 }
 header h1 { font-size: 18px; font-weight: 600; }
-header .host { color: var(--dim); font-size: 13px; }
-header .refresh-info { color: var(--dim); font-size: 11px; margin-left: auto; }
+header .host { color: var(--text-muted); font-size: 13px; }
+header .refresh-info { color: var(--text-muted); font-size: 11px; margin-left: auto; }
 
 .controls {
   padding: 12px 24px; border-bottom: 1px solid var(--border);
@@ -25,22 +28,118 @@ header .refresh-info { color: var(--dim); font-size: 11px; margin-left: auto; }
   background: var(--surface);
 }
 .control-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.control-group label { font-size: 12px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; }
+/* Labels: bumped from --dim (#565f89) to --text-muted (#8b95c5) for readability */
+.control-group label {
+  font-size: 12px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
 
-select, button, input[type="text"], input[type="number"], textarea {
+/* ─── base form controls (inputs, selects, plain buttons) ─────── */
+select, input[type="text"], input[type="number"], textarea {
   background: var(--surface2); border: 1px solid var(--border);
   color: var(--text); padding: 6px 10px; border-radius: 6px;
   font-size: 13px; font-family: inherit;
 }
-button { cursor: pointer; }
-select:hover, button:hover, input:hover, textarea:hover { border-color: var(--accent); }
-button.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
-a.docs-link {
+select:hover, input:hover, textarea:hover { border-color: var(--accent); }
+
+/* ─── buttons: semantic classes ─────────────────────────────────
+   Every button and .docs-link inherits .btn for shared sizing;
+   color comes from a semantic modifier that signals intent.       */
+button, .btn {
+  cursor: pointer;
   background: var(--surface2); border: 1px solid var(--border);
   color: var(--text); padding: 6px 10px; border-radius: 6px;
-  font-size: 13px; text-decoration: none; display: inline-block;
+  font-size: 13px; font-family: inherit;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
 }
-a.docs-link:hover { border-color: var(--accent); color: var(--accent); }
+button:hover { border-color: var(--accent); }
+
+/* Op-add buttons: "+ case", "+ replace", etc. One unified muted
+   purple — signals "these are all the same kind of action". */
+button[data-add] {
+  color: var(--purple);
+  border-color: rgba(187, 154, 247, 0.25);
+  background: rgba(187, 154, 247, 0.06);
+}
+button[data-add]:hover {
+  border-color: var(--purple);
+  background: rgba(187, 154, 247, 0.14);
+}
+
+/* Read-only / navigation (preview primary, share + docs secondary-cyan) */
+#runBtn {
+  background: var(--accent); color: var(--bg);
+  border-color: var(--accent); font-weight: 600;
+}
+#runBtn:hover { background: #9db6fa; border-color: #9db6fa; }
+
+#shareBtn {
+  color: var(--cyan);
+  border-color: rgba(125, 207, 255, 0.35);
+  background: rgba(125, 207, 255, 0.06);
+}
+#shareBtn:hover {
+  border-color: var(--cyan);
+  background: rgba(125, 207, 255, 0.14);
+}
+
+a.docs-link {
+  cursor: pointer;
+  padding: 6px 10px; border-radius: 6px;
+  font-size: 13px; text-decoration: none; display: inline-block;
+  color: var(--green);
+  border: 1px solid rgba(158, 206, 106, 0.35);
+  background: rgba(158, 206, 106, 0.06);
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+a.docs-link:hover {
+  border-color: var(--green);
+  background: rgba(158, 206, 106, 0.14);
+}
+
+/* Mutation: apply = warning */
+#applyBtn {
+  color: var(--orange);
+  border-color: rgba(255, 158, 100, 0.4);
+  background: rgba(255, 158, 100, 0.08);
+  font-weight: 600;
+}
+#applyBtn:hover {
+  background: var(--orange); color: var(--bg); border-color: var(--orange);
+}
+
+/* Recovery: undo = soft red */
+#undoBtn {
+  color: var(--red);
+  border-color: rgba(247, 118, 142, 0.3);
+  background: rgba(247, 118, 142, 0.06);
+}
+#undoBtn:hover {
+  border-color: var(--red);
+  background: rgba(247, 118, 142, 0.14);
+}
+
+/* Reset: clear = dim neutral (understated — it's not the main action) */
+#clearBtn {
+  color: var(--text-muted);
+  border-color: var(--border);
+  background: transparent;
+}
+#clearBtn:hover {
+  color: var(--red); border-color: var(--red);
+  background: rgba(247, 118, 142, 0.06);
+}
+
+/* Input pickers: vibrant green fill — "bring data in" */
+#pickFilesBtn, #pickDirBtn {
+  color: var(--bg);
+  background: var(--green);
+  border-color: var(--green);
+  font-weight: 600;
+}
+#pickFilesBtn:hover, #pickDirBtn:hover {
+  background: #b3dc87; border-color: #b3dc87;
+}
 
 textarea#filesInput {
   width: 100%; min-height: 110px; resize: vertical;
@@ -56,7 +155,10 @@ main { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: 
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 10px; padding: 16px;
 }
-.card .label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.card .label {
+  font-size: 11px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
+}
 
 /* ─── pipeline rows ─── */
 .op-row {
@@ -64,9 +166,9 @@ main { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: 
   padding: 10px; border: 1px solid var(--border); border-radius: 8px;
   margin-bottom: 8px; background: var(--bg);
 }
-.op-row .op-name { color: var(--accent); font-weight: 600; min-width: 90px; font-size: 13px; }
+.op-row .op-name { color: var(--purple); font-weight: 600; min-width: 90px; font-size: 13px; }
 .op-row .param { display: flex; align-items: center; gap: 4px; }
-.op-row .param label { font-size: 11px; color: var(--dim); }
+.op-row .param label { font-size: 11px; color: var(--text-muted); }
 .op-row input[type="text"] { width: 140px; }
 .op-row input[type="number"] { width: 70px; }
 .op-row .remove {
@@ -76,7 +178,7 @@ main { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: 
 .op-row .remove:hover { color: var(--red); text-decoration: underline; }
 
 #pipeline:empty::before {
-  content: "no ops — add one above"; color: var(--dim); font-size: 13px; font-style: italic;
+  content: "no ops — add one above"; color: var(--text-muted); font-size: 13px; font-style: italic;
 }
 
 /* ─── preview rows ─── */
@@ -85,14 +187,14 @@ main { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: 
   font-family: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Menlo, monospace;
   font-size: 13px;
 }
-.preview-grid .old { color: var(--dim); text-align: right; }
+.preview-grid .old { color: var(--text-muted); text-align: right; }
 .preview-grid .arrow { color: var(--dim); }
 .preview-grid .new { color: var(--green); }
-.preview-grid .new.unchanged { color: var(--dim); }
+.preview-grid .new.unchanged { color: var(--text-muted); }
 .preview-grid .new.collision { color: var(--red); font-weight: 600; }
 
 #preview:empty::before {
-  content: "click preview to see results"; color: var(--dim); font-size: 13px; font-style: italic;
+  content: "click preview to see results"; color: var(--text-muted); font-size: 13px; font-style: italic;
 }
 
 .error {
